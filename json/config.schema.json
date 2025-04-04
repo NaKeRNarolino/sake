@@ -1,0 +1,61 @@
+{
+  "title": "The config for Sake",
+  "properties": {
+    "meta": {
+      "type": "object",
+      "description": "Various metadata regarding the project",
+      "properties": {
+        "pack_name": {
+          "type": "string",
+          "description": "The name of the project"
+        }
+      },
+      "required": ["pack_name"]
+    },
+    "enforces_platform": {
+      "type": "string",
+      "enum": ["windows", "linux", "macos"],
+      "description": "Makes it so you can't develop the project on other platforms except the one mentioned."
+    },
+    "default_mode": {
+      "type": "string",
+      "description": "The default mode to run"
+    },
+    "actions": {
+      "type": "object",
+      "description": "Define the actions that the project contains",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "description": "The source of the action"
+          }
+        },
+        "required": ["source"]
+      }
+    },
+    "modes": {
+      "type": "object",
+      "description": "Define the modes used with this project",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "watch": {
+            "type": "boolean",
+            "description": "Wheter the mode should run in watch mode"
+          },
+          "include_actions": {
+            "type": "object",
+            "description": "Which actions should be run on this project"
+          },
+          "target": {
+            "type": "string",
+            "enum": ["release", "preview"]
+          }
+        }
+      }
+    }
+  },
+  "required": ["meta", "default_mode", "enforces_platform", "actions"]
+}

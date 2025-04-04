@@ -1,0 +1,13 @@
+{
+  "$schema": "./config.schema.json",
+  "meta": {
+    "pack_name": ""
+  },
+  "default_mode": "default",
+  "actions": {
+    "hi": {
+      "source": "path::./"
+    }
+  },
+  "enforces_platform": "windows"
+}
