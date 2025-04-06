@@ -1,11 +1,15 @@
+use std::path::PathBuf;
 use std::process::exit;
 use uuid::Uuid;
 use crate::config::Config;
+use crate::context::SakeContext;
 
 mod windows;
 mod fs;
 mod config;
 mod actions;
+mod context;
+
 
 fn main() {
     colog::init();
@@ -14,8 +18,8 @@ fn main() {
 
     match dotenv::dotenv() {
         Ok(_) => {},
-        Err(_) => {
-            println!("Couldn't find .env file, assuming it's not a devenv")
+        Err(e) => {
+            println!("Couldn't find .env file, assuming it's not a devenv {e}")
         }
     }
 
@@ -25,8 +29,10 @@ fn main() {
         fs::acquire_lock(Uuid::new_v4());
     }
 
+    let context = SakeContext::new();
+
     let config: Config = serde_json::from_str(
-        &fs::read_config()
+        &fs::read_config(&context)
     ).unwrap_or_else(|e| {
         log::error!("An error happened during parsing the config.json: {:?}", e);
         exit(0)
@@ -39,11 +45,11 @@ fn main() {
         exit(0)
     });
 
-    fs::temp_operations(&mode, &config);
+    fs::temp_operations(&mode, &config, &context);
 
-    fs::copy_packs(&config.meta);
+    fs::copy_packs(&config.meta, &context);
 
-    fs::clear_temp();
+    fs::clear_temp(&context);
 
     fs::clear_lock()
 }

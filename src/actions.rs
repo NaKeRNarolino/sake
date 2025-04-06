@@ -4,9 +4,10 @@ use std::io::{Read, Write};
 use std::path::PathBuf;
 use subprocess::{Exec, Redirection};
 use crate::config::{ActionSource, Config, ModeConfig};
+use crate::context::SakeContext;
 use crate::fs::path;
 
-pub fn run_actions(mode: &ModeConfig, config: &Config) {
+pub fn run_actions(mode: &ModeConfig, config: &Config, context: &SakeContext) {
     for (name, props) in &mode.include_actions {
         let action_def = match config.actions.get(name) {
             None => {
@@ -26,11 +27,17 @@ pub fn run_actions(mode: &ModeConfig, config: &Config) {
             continue
         };
 
-        log::info!("{}", crate::fs::canonical_str("./.sake/temp"));
+        let mut path = context.sake_dir.clone();
+        path.push("temp");
+        path.push("src");
+
+        log::info!("{}", path.to_string_lossy());
 
         let process = {
             Exec::shell(&format!("{}", action))
-        }.stdout(Redirection::Pipe).cwd(crate::fs::canonical_str("./.sake/temp/src")).capture().unwrap();
+        }.stdout(Redirection::Pipe).cwd(
+            path
+        ).capture().unwrap();
 
         println!("{}", String::from_utf8(process.stdout).unwrap());
     }

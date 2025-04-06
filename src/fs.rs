@@ -7,6 +7,7 @@ use subprocess::{Exec, Redirection};
 use uuid::Uuid;
 use crate::config::{Action, ActionSource, Config, ConfigMeta, ModeConfig};
 use crate::{actions, windows};
+use crate::context::SakeContext;
 
 pub fn find_release_dir() -> PathBuf {
     let platform = std::env::consts::OS;
@@ -19,11 +20,17 @@ pub fn find_release_dir() -> PathBuf {
     }
 }
 
-pub fn read_config() -> String {
-    if std::env::var("SAKE_DEV").unwrap_or("false".into()) == "true" {
-        std::fs::read_to_string("./tests/config.json").unwrap()
-    } else {
-        std::fs::read_to_string("./config.json").unwrap()
+pub fn read_config(context: &SakeContext) -> String {
+    let mut conf = context.project_dir.clone();
+
+    conf.push("config.json");
+
+    match fs::read_to_string(conf) {
+        Ok(content) => content,
+        Err(e) => {
+            log::error!("Sake cannot read the config file: {e}");
+            exit(0);
+        }
     }
 }
 
@@ -62,8 +69,11 @@ pub fn clear_lock() {
     }
 }
 
-pub fn copy_packs(meta: &ConfigMeta) {
-    let mut bp_source = path("./.sake/temp/src/BP");
+pub fn copy_packs(meta: &ConfigMeta, context: &SakeContext) {
+    let mut bp_source = context.sake_dir.clone(); // path("./.sake/temp/src/BP")
+    bp_source.push("temp");
+    bp_source.push("src");
+    bp_source.push("BP");
     let mut bp_res = find_release_dir();
 
     bp_res.push("development_behavior_packs");
@@ -87,7 +97,10 @@ pub fn copy_packs(meta: &ConfigMeta) {
         }
     }
 
-    let mut rp_source = path("./.sake/temp/src/BP");
+    let mut rp_source = context.sake_dir.clone(); // path("./.sake/temp/src/BP")
+    rp_source.push("temp");
+    rp_source.push("src");
+    rp_source.push("RP");
     let mut rp_res = find_release_dir();
 
     rp_res.push("development_resource_packs");
@@ -112,10 +125,13 @@ pub fn copy_packs(meta: &ConfigMeta) {
     }
 }
 
-pub fn temp_operations(mode: &ModeConfig, config: &Config) {
-    let dir = path("./src");
+pub fn temp_operations(mode: &ModeConfig, config: &Config, context: &SakeContext) {
+    let mut dir = context.project_dir.clone();
+    dir.push("src");
 
-    let res = path("./.sake/temp/src");
+    let mut res = context.sake_dir.clone();
+    res.push("temp");
+    res.push("src");
 
     match fs::create_dir_all(&res) {
         Ok(_) => {
@@ -155,11 +171,13 @@ pub fn temp_operations(mode: &ModeConfig, config: &Config) {
         }
     }
 
-    actions::run_actions(mode, config);
+    actions::run_actions(mode, config, &context);
 }
 
-pub fn clear_temp() {
-    let res = path("./.sake/temp");
+pub fn clear_temp(context: &SakeContext) {
+    let mut res = context.sake_dir.clone();
+    res.push("temp");
+    res.push("src");
 
     match fs_extra::dir::remove(res) {
         Ok(_) => {
