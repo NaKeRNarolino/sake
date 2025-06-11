@@ -1,19 +1,16 @@
 {
+  "$schema": "https://raw.githubusercontent.com/NaKeRNarolino/sake/refs/heads/master/json/config.schema.json",
   "meta": {
     "pack_name": "Sake Tests"
   },
-  "enforces_platform": "windows",
+  "enforces_platform": "linux",
   "default_mode": "default",
   "actions": {
-    "nakern:action": {
-      "source": "path::C:\\Users\\narol\\RustroverProjects\\untitled\\target\\release\\untitled.exe"
-    }
   },
   "modes": {
     "default": {
       "watch": false,
       "include_actions": {
-        "nakern:action": {}
       },
       "target": "release"
     }

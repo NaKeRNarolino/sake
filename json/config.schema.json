@@ -55,6 +55,18 @@
           }
         }
       }
+    },
+    "adb": {
+      "type": "object",
+      "title": "ADB Config",
+      "description": "Allows using ADB to make the development process easier.",
+      "properties": {
+        "start_minecraft": {
+          "title": "Start Minecraft",
+          "description": "Immediately start Minecraft when starting Sake.",
+          "type": "boolean"
+        }
+      }
     }
   },
   "required": ["meta", "default_mode", "enforces_platform", "actions"]

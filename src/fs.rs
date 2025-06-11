@@ -6,17 +6,17 @@ use fs_extra::dir::CopyOptions;
 use subprocess::{Exec, Redirection};
 use uuid::Uuid;
 use crate::config::{Action, ActionSource, Config, ConfigMeta, ModeConfig};
-use crate::{actions, windows};
+use crate::{actions, platform};
 use crate::context::SakeContext;
 
 pub fn find_release_dir() -> PathBuf {
     let platform = std::env::consts::OS;
 
     if platform == "windows" {
-        windows::find_release_dir()
+        log::error!("Sake only supports Linux and OSX (macOS).");
+        exit(0);
     } else {
-        log::error!("Platforms other than Windows are not supported.");
-        exit(0)
+        platform::find_release_dir()
     }
 }
 
@@ -53,9 +53,9 @@ pub fn acquire_lock(uuid: Uuid) -> bool {
     let platform = std::env::consts::OS;
 
     if platform == "windows" {
-        windows::acquire_lock(uuid)
+        panic!("Sake only supports Linux and OSX (macOS).")
     } else {
-        panic!("Platforms other than Windows are not supported.")
+        platform::acquire_lock(uuid)
     }
 }
 
@@ -63,9 +63,9 @@ pub fn clear_lock() {
     let platform = std::env::consts::OS;
 
     if platform == "windows" {
-        windows::clear_lock()
+        panic!("Sake only supports Linux and OSX (macOS).")
     } else {
-        panic!("Platforms other than Windows are not supported.")
+        platform::clear_lock()
     }
 }
 

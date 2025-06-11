@@ -4,7 +4,7 @@ use uuid::Uuid;
 use crate::config::Config;
 use crate::context::SakeContext;
 
-mod windows;
+mod platform;
 mod fs;
 mod config;
 mod actions;
