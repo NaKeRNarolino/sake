@@ -65,8 +65,14 @@
           "title": "Start Minecraft",
           "description": "Immediately start Minecraft when starting Sake.",
           "type": "boolean"
+        },
+        "push": {
+          "title": "Push to Android",
+          "description": "Immediately after building to local release, push to Android device's `com.mojang`.",
+          "type": "boolean"
         }
-      }
+      },
+      "required": ["start_minecraft", "push"]
     }
   },
   "required": ["meta", "default_mode", "enforces_platform", "actions"]

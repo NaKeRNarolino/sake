@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/NaKeRNarolino/sake/refs/heads/master/json/config.schema.json",
   "meta": {
-    "pack_name": "Sake Tests"
+    "pack_name": "Sake_Tests"
   },
   "enforces_platform": "linux",
   "default_mode": "default",
@@ -14,5 +14,9 @@
       },
       "target": "release"
     }
+  },
+  "adb": {
+    "start_minecraft": false,
+    "push": false
   }
 }

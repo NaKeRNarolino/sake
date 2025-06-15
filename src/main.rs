@@ -9,6 +9,7 @@ mod fs;
 mod config;
 mod actions;
 mod context;
+mod adb;
 
 
 fn main() {
@@ -51,5 +52,9 @@ fn main() {
 
     fs::clear_temp(&context);
 
+    if let Some(adb) = &config.adb {
+        adb::adb(&config, &adb, &context);
+    }
+    
     fs::clear_lock()
 }

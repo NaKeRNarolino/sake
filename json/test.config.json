@@ -9,5 +9,8 @@
       "source": "path::./"
     }
   },
-  "enforces_platform": "windows"
+  "enforces_platform": "windows",
+  "adb": {
+    "start_minecraft": true
+  }
 }

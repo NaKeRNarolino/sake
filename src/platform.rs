@@ -33,7 +33,7 @@ pub fn find_release_dir() -> PathBuf {
     // buf.push("games");
     // buf.push("com.mojang");
     // 
-    let buf = PathBuf::from(std::env::var("SAKE_RELEASE_DIR").unwrap());
+    let buf = PathBuf::from(std::env::var("SAKE_COMMOJANG_DIR").unwrap());
     
     buf
 }

@@ -19,6 +19,7 @@ pub struct Config {
     pub default_mode: String,
     pub modes: HashMap<String, ModeConfig>,
     pub actions: HashMap<String, Action>,
+    pub adb: Option<ADBConfig>,
     pub meta: ConfigMeta
 }
 
@@ -91,4 +92,10 @@ pub enum ModeTarget {
 #[derive(Serialize, Deserialize)]
 pub struct ConfigMeta {
     pub pack_name: String
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct ADBConfig {
+    pub start_minecraft: bool,
+    pub push: bool
 }
