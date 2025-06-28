@@ -1,0 +1,17 @@
+{
+  "name": "",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "sake": "sudo ./sake",
+    "sake-watch": "sudo npx nodemon --watch src --ext ts,js,jsx,tsx,json,lang,png --exec \"npm run sake\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+  },
+  "devDependencies": {
+  }
+}
